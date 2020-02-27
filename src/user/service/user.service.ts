@@ -11,21 +11,21 @@ export class UserService {
     private readonly userRepository: Repository<User>,
   ) {}
 
-  create(input: CreateUserInput): Promise<User> {
+  create(input: CreateUserInput) {
     const user = this.userRepository.create(input);
     return this.userRepository.save(user);
   }
 
-  findOneById(id: string): Promise<User> {
+  findOneById(id: string) {
     return this.userRepository.findOneOrFail(id);
   }
 
-  async remove(id: string): Promise<boolean> {
-    await this.userRepository.delete(id);
-    return true;
+  async remove(id: string) {
+    const { affected } = await this.userRepository.delete(id);
+    return affected !== 0;
   }
 
-  find(): Promise<User[]> {
+  find() {
     return this.userRepository.find();
   }
 }

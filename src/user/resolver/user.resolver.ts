@@ -9,7 +9,7 @@ export class UserResolver {
   constructor(private readonly userService: UserService) {}
 
   @Query(() => User)
-  async user(@Args('id') id: string): Promise<User> {
+  async user(@Args('id') id: string) {
     const user = await this.userService.findOneById(id);
     if (!user) {
       throw new NotFoundException(id);
@@ -18,7 +18,7 @@ export class UserResolver {
   }
 
   @Mutation(() => User)
-  async createUser(@Args('input') input: CreateUserInput): Promise<User> {
+  createUser(@Args('input') input: CreateUserInput) {
     return this.userService.create(input);
   }
 
