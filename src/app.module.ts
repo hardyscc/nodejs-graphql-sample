@@ -4,18 +4,19 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { User } from './user/entity/user.entity';
 import { UserModule } from './user/user.module';
 
+const databaseUrl =
+  process.env.DATABASE_URL ||
+  'mysql://usr:User12345@localhost:3306/development';
+
 @Module({
   imports: [
     GraphQLModule.forRoot({
-      autoSchemaFile: 'schema.gql',
+      autoSchemaFile: true,
     }),
     TypeOrmModule.forRoot({
       type: 'mysql',
-      host: 'localhost',
-      port: 3306,
-      username: 'usr',
-      password: 'User12345',
-      database: 'development',
+      url: databaseUrl,
+      database: databaseUrl.split('/').pop(),
       entities: [User],
       synchronize: true,
       logging: true,
