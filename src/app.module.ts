@@ -1,6 +1,7 @@
 import { Module } from '@nestjs/common';
 import { GraphQLModule } from '@nestjs/graphql';
 import { TypeOrmModule } from '@nestjs/typeorm';
+import { AuthModule } from './auth/auth.module';
 import { User } from './user/entity/user.entity';
 import { UserModule } from './user/user.module';
 
@@ -12,6 +13,7 @@ const databaseUrl =
   imports: [
     GraphQLModule.forRoot({
       autoSchemaFile: true,
+      context: ({ req }) => ({ req }),
     }),
     TypeOrmModule.forRoot({
       type: 'mysql',
@@ -22,6 +24,7 @@ const databaseUrl =
       logging: true,
     }),
     UserModule,
+    AuthModule,
   ],
 })
 export class AppModule {}

@@ -1,5 +1,7 @@
-import { NotFoundException } from '@nestjs/common';
+import { NotFoundException, UseGuards } from '@nestjs/common';
 import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
+import { CurrentUser } from 'src/auth/current-user.decorator';
+import { GqlAuthGuard } from 'src/auth/guards/gql-auth.guard';
 import { CreateUserInput } from '../dto/create-user.input';
 import { User } from '../entity/user.entity';
 import { UserService } from '../service/user.service';
@@ -27,8 +29,10 @@ export class UserResolver {
     return this.userService.remove(id);
   }
 
+  @UseGuards(GqlAuthGuard)
   @Query(() => [User])
-  users() {
+  users(@CurrentUser() user: User) {
+    console.log('User', user);
     return this.userService.find();
   }
 }
