@@ -6,6 +6,7 @@ import { CreateUserInput } from '../dto/create-user.input';
 import { User } from '../entity/user.entity';
 import { UserService } from '../service/user.service';
 
+@UseGuards(GqlAuthGuard)
 @Resolver(User)
 export class UserResolver {
   constructor(private readonly userService: UserService) {}
@@ -29,7 +30,6 @@ export class UserResolver {
     return this.userService.remove(id);
   }
 
-  @UseGuards(GqlAuthGuard)
   @Query(() => [User])
   users(@CurrentUser() user: User) {
     console.log('User', user);

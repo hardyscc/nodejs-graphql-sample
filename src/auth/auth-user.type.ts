@@ -1,4 +1,4 @@
-export type User = {
+export type AuthUser = {
   name: string;
   scope: string;
   roles: string[];

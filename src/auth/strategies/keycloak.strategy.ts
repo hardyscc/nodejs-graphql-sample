@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { PassportStrategy } from '@nestjs/passport';
 import * as KeycloakBearerStrategy from 'passport-keycloak-bearer';
-import { User } from '../user.type';
+import { AuthUser } from '../auth-user.type';
 
 @Injectable()
 export class KeycloakStrategy extends PassportStrategy(KeycloakBearerStrategy) {
@@ -13,7 +13,7 @@ export class KeycloakStrategy extends PassportStrategy(KeycloakBearerStrategy) {
     });
   }
 
-  async validate(payload: any): Promise<User> {
+  async validate(payload: any): Promise<AuthUser> {
     return {
       name: payload.preferred_username,
       roles: payload.realm_access.roles,
