@@ -48,10 +48,10 @@ npm install @nestjs/graphql graphql-tools graphql apollo-server-express type-gra
 Update the `src/app.module.ts` as follow.
 
 ```ts
-import { Module } from "@nestjs/common";
-import { GraphQLModule } from "@nestjs/graphql";
-import { AppController } from "./app.controller";
-import { AppService } from "./app.service";
+import { Module } from '@nestjs/common';
+import { GraphQLModule } from '@nestjs/graphql';
+import { AppController } from './app.controller';
+import { AppService } from './app.service';
 
 @Module({
   imports: [
@@ -113,7 +113,7 @@ export class AppModule {}
 Create the following file `src/user/user.entity.ts`.
 
 ```ts
-import { Field, ID, ObjectType } from "@nestjs/graphql";
+import { Field, ID, ObjectType } from '@nestjs/graphql';
 
 @ObjectType()
 export class User {
@@ -131,7 +131,7 @@ export class User {
 Create the following file `src/user/create-user.input.ts`.
 
 ```ts
-import { Field, InputType } from "@nestjs/graphql";
+import { Field, InputType } from '@nestjs/graphql';
 
 @InputType()
 export class CreateUserInput {
@@ -148,16 +148,16 @@ export class CreateUserInput {
 Update `src/user/user.resolver.ts` and add the `users` query and `createUser` mutation.
 
 ```ts
-import { Args, Mutation, Query, Resolver } from "@nestjs/graphql";
-import { CreateUserInput } from "./create-user.input";
-import { User } from "./user.entity";
+import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
+import { CreateUserInput } from './create-user.input';
+import { User } from './user.entity';
 
 const users: User[] = [];
 
-@Resolver("User")
+@Resolver('User')
 export class UserResolver {
   @Mutation(() => User)
-  createUser(@Args("input") input: CreateUserInput) {
+  createUser(@Args('input') input: CreateUserInput) {
     const user = new User();
     user.name = input.name;
     user.nickName = input.nickName;
@@ -240,7 +240,7 @@ Goto the GraphQL Playground - http://localhost:4000/graphql.
 Install the required packages.
 
 ```bash
-npm install @nestjs/typeorm typeorm mysql
+npm install @nestjs/typeorm typeorm mysql2
 ```
 
 Add the TypeOrmModule Configuration into `src/app.module.ts` as follow.
@@ -294,14 +294,14 @@ export class UserModule {}
 Update the following file `src/user/user.entity.ts`.
 
 ```ts
-import { Field, ID, ObjectType } from "@nestjs/graphql";
-import { Column, Entity, PrimaryGeneratedColumn } from "typeorm";
+import { Field, ID, ObjectType } from '@nestjs/graphql';
+import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
 
 @ObjectType()
 @Entity()
 export class User {
   @Field(() => ID)
-  @PrimaryGeneratedColumn("uuid")
+  @PrimaryGeneratedColumn('uuid')
   id: string;
 
   @Field()
@@ -325,17 +325,17 @@ nest generate service user --no-spec
 Update the generated file `src/user/user.service.ts` as follow.
 
 ```ts
-import { Injectable } from "@nestjs/common";
-import { InjectRepository } from "@nestjs/typeorm";
-import { Repository } from "typeorm";
-import { CreateUserInput } from "./create-user.input";
-import { User } from "./user.entity";
+import { Injectable } from '@nestjs/common';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
+import { CreateUserInput } from './create-user.input';
+import { User } from './user.entity';
 
 @Injectable()
 export class UserService {
   constructor(
     @InjectRepository(User)
-    private readonly userRepository: Repository<User>
+    private readonly userRepository: Repository<User>,
   ) {}
 
   create(input: CreateUserInput) {
@@ -363,18 +363,18 @@ export class UserService {
 Update the following file `src/user/user.resolver.ts`.
 
 ```ts
-import { NotFoundException } from "@nestjs/common";
-import { Args, Mutation, Query, Resolver, ID } from "@nestjs/graphql";
-import { CreateUserInput } from "./create-user.input";
-import { User } from "./user.entity";
-import { UserService } from "./user.service";
+import { NotFoundException } from '@nestjs/common';
+import { Args, Mutation, Query, Resolver, ID } from '@nestjs/graphql';
+import { CreateUserInput } from './create-user.input';
+import { User } from './user.entity';
+import { UserService } from './user.service';
 
 @Resolver(User)
 export class UserResolver {
   constructor(private readonly userService: UserService) {}
 
   @Query(() => User)
-  async user(@Args({ name: "id", type: () => ID }) id: string) {
+  async user(@Args({ name: 'id', type: () => ID }) id: string) {
     const user = await this.userService.findOneById(id);
     if (!user) {
       throw new NotFoundException(id);
@@ -383,12 +383,12 @@ export class UserResolver {
   }
 
   @Mutation(() => User)
-  createUser(@Args("input") input: CreateUserInput) {
+  createUser(@Args('input') input: CreateUserInput) {
     return this.userService.create(input);
   }
 
   @Mutation(() => ID, { nullable: true })
-  async deleteUser(@Args({ name: "id", type: () => ID }) id: string) {
+  async deleteUser(@Args({ name: 'id', type: () => ID }) id: string) {
     return (await this.userService.delete(id)) ? id : null;
   }
 
