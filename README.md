@@ -2,7 +2,7 @@
 
 ## Overview
 
-Build a basic CRUD backend application on NodeJS with GraphQL & MySQL.
+Build a basic CRUD backend application in NodeJS with GraphQL & MySQL.
 
 ## Technologies
 
